@@ -181,14 +181,16 @@ def _tokenize_article_pieces(encoder, item):
         article_pieces['summary'] = [encoder.begin_summary] + encoder.encode(item['summary']) + [encoder.end_summary]
 
     # 5/6: date
-    date_split = item['publish_date'].split('-')
-    assert len(date_split) == 3
-    assert date_split[0].isdigit()
+    # don't make date compulsory even though it increases padding
+    if len(item['publish_date']) != 0:
+        date_split = item['publish_date'].split('-')
+        assert len(date_split) == 3
+        assert date_split[0].isdigit()
 
-    date_txt = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                'August', 'September', 'October', 'November', 'December'][int(date_split[0]) - 1] + ' {}, {}'.format(
-        date_split[1], date_split[2])
-    article_pieces['date'] = [encoder.begin_date] + encoder.encode(date_txt) + [encoder.end_date]
+        date_txt = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December'][int(date_split[0]) - 1] + ' {}, {}'.format(
+            date_split[1], date_split[2])
+        article_pieces['date'] = [encoder.begin_date] + encoder.encode(date_txt) + [encoder.end_date]
 
     # 6/6: authors
     authors = ', '.join(item['authors'])
