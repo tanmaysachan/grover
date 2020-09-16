@@ -182,7 +182,7 @@ def _tokenize_article_pieces(encoder, item):
 
     # 5/6: date
     # don't make date compulsory even though it increases padding
-    if len(item['publish_date']) != 0:
+    if 'publish_date' in item:
         date_split = item['publish_date'].split('-')
         assert len(date_split) == 3
         assert date_split[0].isdigit()
